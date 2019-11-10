@@ -1,0 +1,22 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+aasdf
+
+void print_data(std::vector<double> & datos);
+
+int main(void)
+{
+  return 0;
+}
+
+void print_data(std::vector<double> & datos)
+{
+  std::ofstream fout("terrestre_15.txt");
+  fout << "# tangente" << "\t" << "Campo del Solenoide" << "\n";
+  for (auto x : datos)
+    {
+      
+    }
+    
+}
