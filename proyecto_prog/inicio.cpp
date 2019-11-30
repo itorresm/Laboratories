@@ -2,8 +2,20 @@
 #include <cmath>
 #include <vector>
 
+struct Particle
+{
+  double Rx = 0.0, Ry = 0.0;
+  double Vx = 0.0, Vy = 0.0;
+  double Fx = 0.0, Fy = 0.0;
+  double mass = 0.0;
+};
+
 const double M = 1.0;
 const double Em = 1.0/(std::pow(M_E, 2));
+const double T = 6;
+const double H = 1;
+const double VX0 = 0;
+const double VY0 = std::sqrt(2.0*((0.260*Em)-potential(data))/M);
 
 void rk4(std::vector<double> & data, double h, double t, int c);
 double f(const std::vector<double> & data, int id, double t, int c);
@@ -17,14 +29,6 @@ int main(void)
   double b = 0.0;
   //for(double b = -3; b <= 3; ++b)
   //{
-      const double T = 6;
-      const double H = 1;
-      const double X0 = 3;
-      const double Y0 = b;
-      const double VX0 = 0;
-      const double VY0 = std::sqrt(2.0*((0.260*Em)-potential(data))/M);
-      std::vector<double> r????????????
-	???????????????????
       std::vector<double> data = {X0, VX0};
       rk4(data, H, T, r, 1);
       std::cout << "\t"; 
@@ -131,3 +135,4 @@ double mag(std::vector<double> & v)
     }
   return std::sqrt(sum);
 }
+
