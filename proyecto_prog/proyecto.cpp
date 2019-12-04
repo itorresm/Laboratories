@@ -2,6 +2,7 @@
 #include <fstream>
 #include <cmath>
 #include <vector>
+#include <string>
 
 struct Particle
 {
@@ -13,33 +14,59 @@ struct Particle
 
 const double M = 1.0;
 const double Em = 1/std::pow(M_E, 2);
-const double TF = 40.1;
+const double TF = 45.0;
 const double DT = 0.1;
-const double H = 1;
+const double H = 0.01;
 
 void initial_conditions(Particle & p, double b);
 void force(Particle & p, double t, const std::vector<double> & dV);
 void evolve(Particle & p, double t, double dt);
-void print(Particle & p, double t);
 double potential(Particle & p);
 void grad_potential(Particle & p, std::vector<double> & dV);
-double angle(Particle & p); 
-
+double angle(Particle & p);
+void file(const std::vector<double> & rx, const std::vector<double> & ry,
+	  std::string fname);
+void save(Particle & p,
+	  std::vector<double> & rx, std::vector<double> & ry,
+	  std::vector<double> & vx, std::vector<double> & vy,
+	  std::vector<double> & fx, std::vector<double> & fy);
+	  
 int main(void)
 {
-  //std::cout.precision(10); std::cout.setf(std::ios::scientific);
-  double b = -0.3905;
+  double b = 0.0;
   double t = 0.0;
+
+  std::vector<double> rx = {0};
+  std::vector<double> ry = {0};
+  std::vector<double> vx = {0};
+  std::vector<double> vy = {0};
+  std::vector<double> fx = {0};
+  std::vector<double> fy = {0};
   std::vector<double> dV(2);
-  
+
+  std::string name;
   Particle p1;
-  initial_conditions(p1, b);
-  for(t = 0; t <= TF; t += DT)
+  int count = 1;
+  for(b = -0.4; b < -0.3; b += H)
     {
-      grad_potential(p1, dV);
-      force(p1, t, dV);
-      evolve(p1, t, DT);
-      print(p1, t);
+      name = "trayectoria_" + std::to_string(count) + ".txt";
+      
+      initial_conditions(p1, b);
+      for(t = 0; t <= TF; t += DT)
+	{
+	  grad_potential(p1, dV);
+	  force(p1, t, dV);
+	  evolve(p1, t, DT);
+	  save(p1, rx, ry, vx, vy, fx, fy);
+	}
+      file(rx, ry, name);
+      rx = {0};
+      ry = {0};
+      vx = {0};
+      vy = {0};
+      fx = {0};
+      fy = {0};
+      ++count;
     }
   return 0;
 }
@@ -70,19 +97,6 @@ void evolve(Particle & p, double t, double dt)
   p.Vy = p.Vy + p.Fy*dt/(p.mass);
 }
 
-void print(Particle & p, double t)
-{
-  std::cout << t << "\t"
-	    << p.Rx << "\t"
-	    << p.Ry << "\t"
-	    << p.Vx << "\t"
-	    << p.Vy << "\t"
-	    << p.Fx << "\t"
-	    << p.Fy << "\t"
-	    << angle(p) << "\t"
-	    << p.mass << "\n";
-}
-
 double potential(Particle & p)
 {
   return p.Rx*p.Rx*p.Ry*p.Ry*std::pow(M_E, -(p.Rx*p.Rx+p.Ry*p.Ry));
@@ -97,4 +111,28 @@ void grad_potential(Particle & p, std::vector<double> & dV)
 double angle(Particle & p)
 {
   return (std::acos(p.Vx/std::sqrt(2.0*(0.260*Em-potential(p))/M)))*180/M_PI;
+}
+
+void save(Particle & p,
+	  std::vector<double> & rx, std::vector<double> & ry,
+	  std::vector<double> & vx, std::vector<double> & vy,
+	  std::vector<double> & fx, std::vector<double> & fy)
+{
+  rx.push_back(p.Rx);
+  ry.push_back(p.Ry);
+  vx.push_back(p.Vx);
+  vy.push_back(p.Vx);
+  fx.push_back(p.Fx);
+  fy.push_back(p.Fy);
+}
+
+void file(const std::vector<double> & rx, const std::vector<double> & ry,
+	  std::string fname)
+{
+  std::ofstream fout(fname);
+  for(int ii = 0; ii < int(rx.size()); ++ii)
+    {
+      fout << ii*0.1 << "\t" << rx[ii] << "\t" << ry[ii] << "\n";   
+    }
+  fout.close();
 }
