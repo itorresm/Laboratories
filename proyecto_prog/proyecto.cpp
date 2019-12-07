@@ -33,7 +33,6 @@ void save(Particle & p,
 	  std::vector<double> & vx, std::vector<double> & vy,
 	  std::vector<double> & fx, std::vector<double> & fy,
 	  std::vector<double> & ang);
-void phi(std::vector<double> & ang);
 void start_gnuplot_ang(void);
 void gnuplot_ang(void);
 	  
@@ -66,7 +65,6 @@ int main(void)
 	  evolve(p1, t, DT);
 	  save(p1, rx, ry, vx, vy, fx, fy, ang);
 	}
-      //phi(ang);
       file(rx, ry, ang, b, name);
       rx = {0};
       ry = {0};
