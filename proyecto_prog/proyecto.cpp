@@ -35,7 +35,8 @@ void save(Particle & p,
 	  std::vector<double> & ang);
 void start_gnuplot_ang(void);
 void gnuplot_ang(void);
-	  
+void gnuplot_tray(void);
+ 
 int main(void)
 {
   double b = 0.0;
@@ -77,6 +78,7 @@ int main(void)
     }
   start_gnuplot_ang();
   gnuplot_ang();
+  gnuplot_tray();
   return 0;
 }
 
@@ -155,7 +157,7 @@ void file(const std::vector<double> & rx, const std::vector<double> & ry,
   for(int ii = 0; ii < int(rx.size()); ++ii)
     {
       fout << ii*0.1 << "\t" << rx[ii] << "\t" << ry[ii] << "\t"
-	   << ang[ii] << "\t" << b <<  "\n";   
+	   << ang[ii] << "\t" << b <<  "\n";  
     }
   fout.close();
 }
@@ -168,13 +170,13 @@ void start_gnuplot_ang(void)
 	    << "unset key" << "\n"
 	    << "set xrange [0:45]" << "\n"
 	    << "set yrange [-3:3]" << "\n"
-	    << "set xlabel 'b'" << "\n"
-    	    << "set ylabel '{/Symbol f}(rad)'" << "\n";
+	    << "set xlabel 't'" << "\n"
+	    << "set ylabel '{/Symbol f}(rad)'" << "\n";
 }
 
 void gnuplot_ang(void)
 {
-  std::cout << "plot"; 
+  std::cout << "plot";
   for(int ii = 1; ii <= int((BB-BA)/H); ++ii)
     {
       std::cout << " 'trayectoria_" << ii << ".txt'"
@@ -183,24 +185,28 @@ void gnuplot_ang(void)
   std::cout <<  "\n";
 }
 
-void phi(std::vector<double> & ang)
+void gnuplot_tray(void)
 {
-  std::ofstream fout("angulo.txt");
-  for(int ii = 0; ii <= int((BB-BA)/H); ++ii)
-    {
-      fout << ii*H + BA << "\t" << ang[ii];
-    }
-  fout.close();
+  // Gnuplot para trayectorias
+  std::cout << "reset" << "\n"
+	    << "set term png" << "\n"
+	    << "set out 'trayectoria.png'" << "\n"
+	    << "f(x,y) = x**2*y**2*exp(-(x**2+y**2))" << "\n"
+	    << "set contour" << "\n"
+	    << "set cntrparam levels incre 0.03,0.01,0.13" << "\n"
+	    << "set view map" << "\n"
+	    << "set isosample 100,100" << "\n"
+	    << "unset key" << "\n"
+	    << "set xrange [-3:3]" << "\n"
+	    << "set yrange [-3:3]" << "\n"
+	    << "set xlabel 'x'" <<  "\n"
+	    << "set ylabel 'y'" <<  "\n"
+	    << "splot f(x,y) lc rgb 'white',"
+	    << " 'trayectoria_5.txt'"
+	    << " u 2:3:1 lc rgb 'red' lw 0.00001,"
+	    << " 'trayectoria_6.txt'"
+	    << " u 2:3:1 lc rgb 'cyan' lw 0.00001,"
+	    << " 'trayectoria_7.txt'"
+	    << " u 2:3:1 lc rgb 'green' lw 0.00001";    
+  std::cout << "\n";
 }
-
-//          Gnuplot para trayectorias
-//          << "f(x,y) = x**2*y**2*exp(-(x**2+y**2))" << "\n"
-// 	    << "set contour" << "\n"
-// 	    << "set cntrparam levels incre 0.03,0.01,0.13" << "\n"
-// 	    << "set view map" << "\n"
-// 	    << "set isosample 100,100" << "\n"
-// 	    << "unset key" << "\n"
-// 	    << "set xrange [-3:3]" << "\n"
-// 	    << "set yrange [-3:3]" << "\n"
-//          << "set xlabel 'x' <<  "\n"
-//          << "set ylabel 'y' <<  "\n";
