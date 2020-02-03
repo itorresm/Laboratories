@@ -55,22 +55,22 @@ void gnuplot(void)
 	    << "set out 'osc1.pdf'" << "\n"
 	    << "unset key" << "\n"
 	    << "set xlabel '{/Symbol w} (k rad/s)'" << "\n"
-	    << "set ylabel 'I ({/Symbol u}A)'" << "\n"
+	    << "set ylabel 'I ({/Symbol m}A)'" << "\n"
 	    << "set xrange [0:13]" << "\n"
 	    << "set yrange [0:525]" << "\n"
 	    << "f(x) = a*x**2+b*x+c" << "\n"
 	    << "fit f(x) 'osc1.txt' u 1:2 via a,b,c" << "\n"
-	    << "plot 'osc1.txt' u 1:2 w p ls 6 ps 2 lc rgb 'red',                               f(x) lc rgb 'blue'" << "\n"
+	    << "plot 'osc1.txt' u 1:2 w p ls 6 ps 1.5 lc rgb 'red',                               f(x) lc rgb 'blue'" << "\n"
     
 	    << "reset" << "\n"
 	    << "set term pdf" << "\n"
 	    << "set out 'osc2.pdf'" << "\n"
 	    << "unset key" << "\n"
 	    << "set xlabel '{/Symbol w} (k rad/s)'" << "\n"
-	    << "set ylabel 'I ({/Symbol u}A)' " << "\n"
+	    << "set ylabel 'I ({/Symbol m}A)' " << "\n"
 	    << "set xrange [0:12]" << "\n"
 	    << "set yrange [0:2350]" << "\n"
-	    << "f(x) = a*x**2+b*x+c" << "\n"
-	    << "fit f(x) 'osc2.txt' u 1:2 via a,b,c" << "\n"
-	    << "plot 'osc2.txt' u 1:2 w p ls 6 ps 2 lc rgb 'red',                               f(x) lc rgb 'blue'" << "\n";
+	    << "f(x) = a/sqrt(b+(x*c-d/x)**2)" << "\n"
+	    << "fit f(x) 'osc2.txt' u 1:2 via a,b,c,d" << "\n"
+	    << "plot 'osc2.txt' u 1:2 w p ls 6 ps 1.5 lc rgb 'red',                               f(x) lc rgb 'blue'" << "\n";
 }
