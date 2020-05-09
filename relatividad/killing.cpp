@@ -43,11 +43,9 @@ int main (void)
 
 double prodint(Eigen::MatrixXd &A, Eigen::MatrixXd &B)
 {
-  double t = 0;
   Eigen::MatrixXd C;
   C = A*B;
-  t = C.trace();
-  return t/2.0;
+  return (C.trace())/2.0;
 }
 
 Eigen::MatrixXd conm(Eigen::MatrixXd &A, Eigen::MatrixXd &B)
